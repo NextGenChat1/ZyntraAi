@@ -1,603 +1,606 @@
-import React, { useState, useRef } from 'react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All-in-One Creative Studio</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom spinner animation */
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Hide all sections by default */
+        .content-section {
+            display: none;
+        }
+        /* Show active section */
+        .content-section.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 min-h-screen flex flex-col font-sans text-gray-800">
 
-// Main application component
-const App = () => {
-    // State to manage the active view ('sticker', 'meme', 'story', 'effects')
-    const [activeView, setActiveView] = useState('sticker');
+    <!-- Navigation Bar -->
+    <nav class="bg-white bg-opacity-90 backdrop-blur-md shadow-lg p-4 sticky top-0 z-50">
+        <div class="container mx-auto flex flex-col sm:flex-row justify-center items-center gap-4">
+            <h1 class="text-xl font-bold text-indigo-700">Creative Studio</h1>
+            <div class="flex flex-wrap justify-center gap-2">
+                <button id="nav-sticker" class="px-4 py-2 rounded-full font-medium transition-colors duration-200 bg-indigo-600 text-white shadow-lg">
+                    Sticker Maker
+                </button>
+                <button id="nav-meme" class="px-4 py-2 rounded-full font-medium transition-colors duration-200 text-gray-600 hover:bg-gray-200">
+                    Meme Generator
+                </button>
+                <button id="nav-story" class="px-4 py-2 rounded-full font-medium transition-colors duration-200 text-gray-600 hover:bg-gray-200">
+                    Story Generator
+                </button>
+                <button id="nav-effects" class="px-4 py-2 rounded-full font-medium transition-colors duration-200 text-gray-600 hover:bg-gray-200">
+                    Picture Effects
+                </button>
+            </div>
+        </div>
+    </nav>
 
-    return (
-        <div className="bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 min-h-screen flex flex-col font-sans text-gray-800">
-            {/* Navigation Bar */}
-            <nav className="bg-white bg-opacity-90 backdrop-blur-md shadow-lg p-4 sticky top-0 z-50">
-                <div className="container mx-auto flex flex-col sm:flex-row justify-center items-center gap-4">
-                    <h1 className="text-xl font-bold text-indigo-700">Creative Studio</h1>
-                    <div className="flex gap-4">
-                        <button
-                            onClick={() => setActiveView('sticker')}
-                            className={`px-4 py-2 rounded-full font-medium transition-colors duration-200 ${
-                                activeView === 'sticker' ? 'bg-indigo-600 text-white shadow-lg' : 'text-gray-600 hover:bg-gray-200'
-                            }`}
-                        >
-                            Sticker Maker
-                        </button>
-                        <button
-                            onClick={() => setActiveView('meme')}
-                            className={`px-4 py-2 rounded-full font-medium transition-colors duration-200 ${
-                                activeView === 'meme' ? 'bg-indigo-600 text-white shadow-lg' : 'text-gray-600 hover:bg-gray-200'
-                            }`}
-                        >
-                            Meme Generator
-                        </button>
-                        <button
-                            onClick={() => setActiveView('story')}
-                            className={`px-4 py-2 rounded-full font-medium transition-colors duration-200 ${
-                                activeView === 'story' ? 'bg-indigo-600 text-white shadow-lg' : 'text-gray-600 hover:bg-gray-200'
-                            }`}
-                        >
-                            Story Generator
-                        </button>
-                        <button
-                            onClick={() => setActiveView('effects')}
-                            className={`px-4 py-2 rounded-full font-medium transition-colors duration-200 ${
-                                activeView === 'effects' ? 'bg-indigo-600 text-white shadow-lg' : 'text-gray-600 hover:bg-gray-200'
-                            }`}
-                        >
-                            Picture Effects
-                        </button>
+    <!-- Main Content Area -->
+    <main class="flex-grow container mx-auto p-4 sm:p-8">
+        <div class="bg-white bg-opacity-90 backdrop-blur-md rounded-3xl shadow-2xl p-6 sm:p-8 w-full transition-all duration-300">
+            
+            <!-- Sticker Maker Section -->
+            <div id="sticker-section" class="content-section active">
+                <div class="flex flex-col gap-6">
+                    <h2 class="text-3xl font-bold text-center text-gray-800">AI Sticker Maker</h2>
+                    <p class="text-center text-gray-600">
+                        Upload an image and provide a text prompt to create a unique AI sticker.
+                    </p>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label for="sticker-image-upload" class="block text-sm font-medium text-gray-700 mb-2">Upload Image</label>
+                            <div class="mt-1 flex justify-center rounded-xl border-2 border-dashed border-gray-300 px-6 pt-5 pb-6 hover:border-indigo-400 transition-colors duration-200">
+                                <div class="space-y-1 text-center">
+                                    <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m-4-4l-1.172 1.172a4 4 0 01-5.656 0L28 28m0 0L42 12m-8 8l4-4m-4-4l-4 4m-4-4l4 4M8 12h16m-4-4h4a4 4 0 014 4v4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    <div class="flex text-sm text-gray-600">
+                                        <label for="sticker-image-upload" class="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2">
+                                            <span>Upload a file</span>
+                                            <input id="sticker-image-upload" name="sticker-image-upload" type="file" class="sr-only" accept="image/*" />
+                                        </label>
+                                        <p class="pl-1">or drag and drop</p>
+                                    </div>
+                                    <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                                </div>
+                            </div>
+                        </div>
+        
+                        <div>
+                            <label for="sticker-prompt-input" class="block text-sm font-medium text-gray-700 mb-2">
+                                Text Prompt (e.g., "a cute cat wearing a hat")
+                            </label>
+                            <textarea
+                                id="sticker-prompt-input"
+                                rows="3"
+                                class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full rounded-xl border-gray-300 p-3"
+                                placeholder="Describe the sticker you want to create..."
+                            ></textarea>
+                        </div>
+                    </div>
+        
+                    <button id="sticker-generate-button" class="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent rounded-full shadow-lg text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 disabled:opacity-50">
+                        <span id="sticker-button-text">Create Sticker</span>
+                        <div id="sticker-loading-spinner" class="ml-2 hidden spinner"></div>
+                    </button>
+        
+                    <div id="sticker-error-box" class="hidden mt-4 p-4 rounded-xl text-sm text-center text-red-700 bg-red-100 border border-red-400">
+                        <span id="sticker-error-text"></span>
+                    </div>
+        
+                    <div id="sticker-result-section" class="hidden mt-4">
+                        <h2 class="text-2xl font-bold text-center text-gray-800 mb-4">Your Sticker</h2>
+                        <div class="bg-gray-100 rounded-2xl p-4 shadow-inner flex items-center justify-center">
+                            <img id="sticker-generated-image" class="max-w-full h-auto rounded-xl shadow-lg" alt="Generated Sticker">
+                        </div>
+                        <div class="flex justify-center mt-4">
+                            <button id="sticker-download-button" class="inline-flex items-center px-4 py-2 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
+                                Download Sticker
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </nav>
+            </div>
 
-            {/* Main Content Area */}
-            <main className="flex-grow container mx-auto p-4 sm:p-8">
-                <div className="bg-white bg-opacity-90 backdrop-blur-md rounded-3xl shadow-2xl p-6 sm:p-8 w-full transition-all duration-300">
-                    {activeView === 'sticker' && <StickerMaker />}
-                    {activeView === 'meme' && <MemeGenerator />}
-                    {activeView === 'story' && <StoryGenerator />}
-                    {activeView === 'effects' && <PictureEffects />}
+            <!-- Meme Generator Section -->
+            <div id="meme-section" class="content-section">
+                <div class="flex flex-col gap-6">
+                    <h2 class="text-3xl font-bold text-center text-gray-800">Meme Generator</h2>
+                    <p class="text-center text-gray-600">
+                        Upload an image and add your own text to create a custom meme.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <div class="flex-1 space-y-4">
+                            <div class="flex flex-col items-start gap-2">
+                                <label for="meme-image-upload" class="block text-sm font-medium text-gray-700">Upload Meme Image</label>
+                                <input
+                                    type="file"
+                                    id="meme-image-upload"
+                                    class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+                                    accept="image/*"
+                                />
+                            </div>
+                            <div>
+                                <label for="meme-top-text" class="block text-sm font-medium text-gray-700">Top Text</label>
+                                <input
+                                    type="text"
+                                    id="meme-top-text"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2"
+                                    placeholder="Enter top text here"
+                                />
+                            </div>
+                            <div>
+                                <label for="meme-bottom-text" class="block text-sm font-medium text-gray-700">Bottom Text</label>
+                                <input
+                                    type="text"
+                                    id="meme-bottom-text"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2"
+                                    placeholder="Enter bottom text here"
+                                />
+                            </div>
+                        </div>
+                        <div class="flex-1 flex flex-col items-center justify-center bg-gray-100 rounded-xl p-4">
+                            <canvas id="meme-canvas" class="max-w-full h-auto rounded-lg shadow-lg hidden"></canvas>
+                            <div id="meme-placeholder" class="w-full h-64 flex items-center justify-center text-gray-400 border-2 border-dashed rounded-lg">
+                                Image Preview
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="meme-download-button" class="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent rounded-full shadow-lg text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 disabled:opacity-50">
+                        Download Meme
+                    </button>
                 </div>
-            </main>
+            </div>
+
+            <!-- Story Generator Section -->
+            <div id="story-section" class="content-section">
+                <div class="flex flex-col gap-6">
+                    <h2 class="text-3xl font-bold text-center text-gray-800">AI Story Generator</h2>
+                    <p class="text-center text-gray-600">
+                        Provide a prompt and let AI write a short story for you.
+                    </p>
+
+                    <div>
+                        <label for="story-prompt-input" class="block text-sm font-medium text-gray-700 mb-2">
+                            Story Prompt
+                        </label>
+                        <textarea
+                            id="story-prompt-input"
+                            rows="4"
+                            class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full rounded-xl border-gray-300 p-3"
+                            placeholder="e.g., 'A lost astronaut discovers an ancient civilization on a jungle planet.'"
+                        ></textarea>
+                    </div>
+
+                    <button id="story-generate-button" class="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent rounded-full shadow-lg text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 disabled:opacity-50">
+                        <span id="story-button-text">Generate Story</span>
+                        <div id="story-loading-spinner" class="ml-2 hidden spinner"></div>
+                    </button>
+        
+                    <div id="story-error-box" class="hidden mt-4 p-4 rounded-xl text-sm text-center text-red-700 bg-red-100 border border-red-400">
+                        <span id="story-error-text"></span>
+                    </div>
+
+                    <div id="story-output-section" class="hidden mt-4 p-6 bg-gray-100 rounded-2xl shadow-inner whitespace-pre-wrap">
+                        <p id="story-text"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Picture Effects Section -->
+            <div id="effects-section" class="content-section">
+                <div class="flex flex-col gap-6">
+                    <h2 class="text-3xl font-bold text-center text-gray-800">Picture Effects</h2>
+                    <p class="text-center text-gray-600">
+                        Upload a picture and apply various filters and effects.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <div class="flex-1 space-y-4">
+                            <div class="flex flex-col items-start gap-2">
+                                <label for="effects-image-upload" class="block text-sm font-medium text-gray-700">Upload Image</label>
+                                <input
+                                    type="file"
+                                    id="effects-image-upload"
+                                    class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+                                    accept="image/*"
+                                />
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <button data-filter="none" class="filter-button px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 bg-indigo-600 text-white">
+                                    None
+                                </button>
+                                <button data-filter="grayscale" class="filter-button px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 bg-gray-200 hover:bg-gray-300">
+                                    Grayscale
+                                </button>
+                                <button data-filter="sepia" class="filter-button px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 bg-gray-200 hover:bg-gray-300">
+                                    Sepia
+                                </button>
+                                <button data-filter="invert" class="filter-button px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 bg-gray-200 hover:bg-gray-300">
+                                    Invert
+                                </button>
+                                <button data-filter="blur" class="filter-button px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 bg-gray-200 hover:bg-gray-300">
+                                    Blur
+                                </button>
+                            </div>
+                        </div>
+                        <div class="flex-1 flex flex-col items-center justify-center">
+                            <img id="effects-image-preview" src="" alt="Preview" class="max-w-full h-auto rounded-lg shadow-lg hidden">
+                            <div id="effects-placeholder" class="w-full h-64 flex items-center justify-center text-gray-400 border-2 border-dashed rounded-lg bg-gray-100">
+                                Image Preview
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="effects-download-button" class="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent rounded-full shadow-lg text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 disabled:opacity-50">
+                        Download Image
+                    </button>
+                </div>
+            </div>
+
         </div>
-    );
-};
+    </main>
 
-// Sticker Maker Component
-const StickerMaker = () => {
-    const [imageFile, setImageFile] = useState(null);
-    const [prompt, setPrompt] = useState('');
-    const [generatedImageUrl, setGeneratedImageUrl] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- UI and Navigation Logic ---
+            const navButtons = document.querySelectorAll('nav button');
+            const contentSections = document.querySelectorAll('.content-section');
+            let currentFilter = 'none';
 
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            if (file.size > 10 * 1024 * 1024) {
-                setError('Image is too large. Please upload a file under 10MB.');
-                setImageFile(null);
-                return;
+            function switchView(viewId) {
+                navButtons.forEach(btn => btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-lg', 'hover:bg-gray-200', 'text-gray-600'));
+                navButtons.forEach(btn => btn.classList.add('text-gray-600', 'hover:bg-gray-200'));
+                contentSections.forEach(section => section.classList.remove('active'));
+
+                document.getElementById(`nav-${viewId}`).classList.remove('text-gray-600', 'hover:bg-gray-200');
+                document.getElementById(`nav-${viewId}`).classList.add('bg-indigo-600', 'text-white', 'shadow-lg');
+                document.getElementById(`${viewId}-section`).classList.add('active');
             }
-            setImageFile(file);
-            setError(null);
-        }
-    };
 
-    const toBase64 = (file) => {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result.split(',')[1]);
-            reader.onerror = (error) => reject(error);
-        });
-    };
+            navButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const viewId = e.target.id.split('-')[1];
+                    switchView(viewId);
+                });
+            });
 
-    const handleGenerate = async () => {
-        setError(null);
-        setGeneratedImageUrl(null);
-
-        if (!imageFile || !prompt) {
-            setError('Please upload an image and write a prompt.');
-            return;
-        }
-
-        setIsLoading(true);
-
-        try {
-            const base64ImageData = await toBase64(imageFile);
-            const payload = {
-                instances: {
-                    prompt: prompt,
-                    image: { bytesBase64Encoded: base64ImageData },
-                },
-                parameters: {
-                    sampleCount: 1,
-                    negativePrompt: "low quality, blurry, distorted, text, watermark",
-                },
+            // --- Common Utility Functions ---
+            const toBase64 = (file) => {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = () => resolve(reader.result.split(',')[1]);
+                    reader.onerror = error => reject(error);
+                });
             };
-            const apiKey = 'AIzaSyBgc9zR-9Y7wqaBFdpxYw9oY5sTdTjYvFA'; // Provided by Canvas
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
 
-            let response;
-            let attempt = 0;
-            const maxAttempts = 5;
-            const delay = 1000;
+            function showMessage(elementId, message, type = 'error') {
+                const messageBox = document.getElementById(elementId);
+                const messageText = messageBox.querySelector('span');
+                messageBox.classList.remove('hidden', 'bg-red-100', 'text-red-700', 'border-red-400', 'bg-green-100', 'text-green-700', 'border-green-400');
+                messageBox.classList.add(
+                    type === 'error' ? 'bg-red-100' : 'bg-green-100',
+                    type === 'error' ? 'text-red-700' : 'text-green-700',
+                    type === 'error' ? 'border-red-400' : 'border-green-400'
+                );
+                messageText.textContent = message;
+            }
 
-            while (attempt < maxAttempts) {
+            function hideMessage(elementId) {
+                document.getElementById(elementId).classList.add('hidden');
+            }
+
+            // --- Sticker Maker Logic ---
+            const stickerImageUpload = document.getElementById('sticker-image-upload');
+            const stickerPromptInput = document.getElementById('sticker-prompt-input');
+            const stickerGenerateButton = document.getElementById('sticker-generate-button');
+            const stickerButtonText = document.getElementById('sticker-button-text');
+            const stickerLoadingSpinner = document.getElementById('sticker-loading-spinner');
+            const stickerResultSection = document.getElementById('sticker-result-section');
+            const stickerGeneratedImage = document.getElementById('sticker-generated-image');
+            const stickerDownloadButton = document.getElementById('sticker-download-button');
+
+            stickerGenerateButton.addEventListener('click', async () => {
+                hideMessage('sticker-error-box');
+                stickerResultSection.classList.add('hidden');
+
+                const file = stickerImageUpload.files[0];
+                const prompt = stickerPromptInput.value.trim();
+
+                if (!file || !prompt) {
+                    showMessage('sticker-error-box', 'Please upload an image and write a prompt.');
+                    return;
+                }
+
+                if (file.size > 10 * 1024 * 1024) {
+                    showMessage('sticker-error-box', 'Image is too large. Please upload a file under 10MB.');
+                    return;
+                }
+
+                stickerGenerateButton.disabled = true;
+                stickerButtonText.textContent = 'Generating...';
+                stickerLoadingSpinner.classList.remove('hidden');
+
                 try {
-                    response = await fetch(apiUrl, {
+                    const base64ImageData = await toBase64(file);
+                    const payload = {
+                        instances: {
+                            prompt: prompt,
+                            image: { bytesBase64Encoded: base64ImageData },
+                        },
+                        parameters: {
+                            sampleCount: 1,
+                            negativePrompt: "low quality, blurry, distorted, text, watermark",
+                        },
+                    };
+                    const apiKey = "";
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
+
+                    const response = await fetch(apiUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload),
                     });
-                    if (response.ok) break;
-                    if (response.status === 429) {
-                        attempt++;
-                        const currentDelay = delay * Math.pow(2, attempt);
-                        await new Promise(res => setTimeout(res, currentDelay));
-                    } else {
+
+                    if (!response.ok) {
                         throw new Error(`API error: ${response.status} ${response.statusText}`);
                     }
-                } catch (e) {
-                    if (attempt === maxAttempts - 1) throw e;
-                    attempt++;
-                    const currentDelay = delay * Math.pow(2, attempt);
-                    await new Promise(res => setTimeout(res, currentDelay));
+                    const result = await response.json();
+                    const base64Data = result?.predictions?.[0]?.bytesBase64Encoded;
+
+                    if (!base64Data) {
+                        throw new Error('No image data received from the API.');
+                    }
+                    
+                    const imageUrl = `data:image/png;base64,${base64Data}`;
+                    stickerGeneratedImage.src = imageUrl;
+                    stickerResultSection.classList.remove('hidden');
+
+                } catch (error) {
+                    console.error('API Error:', error);
+                    showMessage('sticker-error-box', `An error occurred: ${error.message}`);
+                } finally {
+                    stickerGenerateButton.disabled = false;
+                    stickerButtonText.textContent = 'Create Sticker';
+                    stickerLoadingSpinner.classList.add('hidden');
                 }
-            }
-
-            if (!response || !response.ok) {
-                throw new Error('API call failed after multiple retries.');
-            }
-
-            const result = await response.json();
-            const base64Data = result?.predictions?.[0]?.bytesBase64Encoded;
-            if (!base64Data) {
-                throw new Error('No image data received from the API.');
-            }
-
-            setGeneratedImageUrl(`data:image/png;base64,${base64Data}`);
-        } catch (err) {
-            console.error('Generation Error:', err);
-            setError(`An error occurred: ${err.message}`);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    const handleDownload = () => {
-        if (generatedImageUrl) {
-            const link = document.createElement('a');
-            link.href = generatedImageUrl;
-            link.download = 'ai-sticker.png';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-    };
-
-    return (
-        <div className="flex flex-col gap-6">
-            <h2 className="text-3xl font-bold text-center text-gray-800">AI Sticker Maker</h2>
-            <p className="text-center text-gray-600">
-                Upload an image and provide a text prompt to create a unique AI sticker.
-            </p>
-
-            <div className="space-y-4">
-                <div>
-                    <label htmlFor="image-upload" className="block text-sm font-medium text-gray-700 mb-2">Upload Image</label>
-                    <div className="mt-1 flex justify-center rounded-xl border-2 border-dashed border-gray-300 px-6 pt-5 pb-6 hover:border-indigo-400 transition-colors duration-200">
-                        <div className="space-y-1 text-center">
-                            <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m-4-4l-1.172 1.172a4 4 0 01-5.656 0L28 28m0 0L42 12m-8 8l4-4m-4-4l-4 4m-4-4l4 4M8 12h16m-4-4h4a4 4 0 014 4v4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                            <div className="flex text-sm text-gray-600">
-                                <label htmlFor="image-upload" className="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2">
-                                    <span>Upload a file</span>
-                                    <input id="image-upload" name="image-upload" type="file" className="sr-only" accept="image/*" onChange={handleImageChange} />
-                                </label>
-                                <p className="pl-1">or drag and drop</p>
-                            </div>
-                            <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <label htmlFor="prompt-input" className="block text-sm font-medium text-gray-700 mb-2">
-                        Text Prompt (e.g., "a cute cat wearing a hat")
-                    </label>
-                    <textarea
-                        id="prompt-input"
-                        rows="3"
-                        className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full rounded-xl border-gray-300 p-3"
-                        placeholder="Describe the sticker you want to create..."
-                        value={prompt}
-                        onChange={(e) => setPrompt(e.target.value)}
-                    ></textarea>
-                </div>
-            </div>
-
-            <button
-                onClick={handleGenerate}
-                disabled={isLoading}
-                className="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent rounded-full shadow-lg text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 disabled:opacity-50"
-            >
-                <span>{isLoading ? 'Generating...' : 'Create Sticker'}</span>
-                {isLoading && (
-                    <div className="ml-2 h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                )}
-            </button>
-
-            {error && (
-                <div className="mt-4 p-4 rounded-xl text-sm text-center text-red-700 bg-red-100 border border-red-400">
-                    {error}
-                </div>
-            )}
-
-            {generatedImageUrl && (
-                <div className="mt-4">
-                    <h2 className="text-2xl font-bold text-center text-gray-800 mb-4">Your Sticker</h2>
-                    <div className="bg-gray-100 rounded-2xl p-4 shadow-inner flex items-center justify-center">
-                        <img src={generatedImageUrl} className="max-w-full h-auto rounded-xl shadow-lg" alt="Generated Sticker" />
-                    </div>
-                    <div className="flex justify-center mt-4">
-                        <button
-                            onClick={handleDownload}
-                            className="inline-flex items-center px-4 py-2 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200"
-                        >
-                            Download Sticker
-                        </button>
-                    </div>
-                </div>
-            )}
-        </div>
-    );
-};
-
-// Meme Generator Component
-const MemeGenerator = () => {
-    const [topText, setTopText] = useState('');
-    const [bottomText, setBottomText] = useState('');
-    const [image, setImage] = useState(null);
-    const canvasRef = useRef(null);
-    const imageRef = useRef(null);
-
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const img = new Image();
-                img.onload = () => {
-                    imageRef.current = img;
-                    drawMeme();
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-            setImage(URL.createObjectURL(file));
-        }
-    };
-
-    const drawMeme = () => {
-        const canvas = canvasRef.current;
-        const ctx = canvas.getContext('2d');
-        const img = imageRef.current;
-
-        if (!img) return;
-
-        canvas.width = img.width;
-        canvas.height = img.height;
-
-        ctx.drawImage(img, 0, 0);
-        ctx.fillStyle = 'white';
-        ctx.strokeStyle = 'black';
-        ctx.lineWidth = 2;
-        ctx.textAlign = 'center';
-        ctx.font = `${img.width / 15}px Impact`;
-
-        // Top text
-        ctx.textBaseline = 'top';
-        ctx.fillText(topText.toUpperCase(), canvas.width / 2, 10);
-        ctx.strokeText(topText.toUpperCase(), canvas.width / 2, 10);
-
-        // Bottom text
-        ctx.textBaseline = 'bottom';
-        ctx.fillText(bottomText.toUpperCase(), canvas.width / 2, canvas.height - 10);
-        ctx.strokeText(bottomText.toUpperCase(), canvas.width / 2, canvas.height - 10);
-    };
-
-    const handleDownload = () => {
-        const link = document.createElement('a');
-        link.href = canvasRef.current.toDataURL('image/png');
-        link.download = 'my-meme.png';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    };
-
-    React.useEffect(() => {
-        drawMeme();
-    }, [topText, bottomText, image]);
-
-    return (
-        <div className="flex flex-col gap-6">
-            <h2 className="text-3xl font-bold text-center text-gray-800">Meme Generator</h2>
-            <p className="text-center text-gray-600">
-                Upload an image and add your own text to create a custom meme.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4">
-                <div className="flex-1 space-y-4">
-                    <div className="flex flex-col items-start gap-2">
-                        <label htmlFor="meme-image" className="block text-sm font-medium text-gray-700">Upload Meme Image</label>
-                        <input
-                            type="file"
-                            id="meme-image"
-                            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
-                            onChange={handleImageChange}
-                            accept="image/*"
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor="top-text" className="block text-sm font-medium text-gray-700">Top Text</label>
-                        <input
-                            type="text"
-                            id="top-text"
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                            value={topText}
-                            onChange={(e) => setTopText(e.target.value)}
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor="bottom-text" className="block text-sm font-medium text-gray-700">Bottom Text</label>
-                        <input
-                            type="text"
-                            id="bottom-text"
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                            value={bottomText}
-                            onChange={(e) => setBottomText(e.target.value)}
-                        />
-                    </div>
-                </div>
-                <div className="flex-1 flex flex-col items-center justify-center bg-gray-100 rounded-xl p-4">
-                    {image ? (
-                        <canvas ref={canvasRef} className="max-w-full h-auto rounded-lg shadow-lg" />
-                    ) : (
-                        <div className="w-full h-64 flex items-center justify-center text-gray-400 border-2 border-dashed rounded-lg">
-                            Image Preview
-                        </div>
-                    )}
-                </div>
-            </div>
-
-            <button
-                onClick={handleDownload}
-                disabled={!image}
-                className="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent rounded-full shadow-lg text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 disabled:opacity-50"
-            >
-                Download Meme
-            </button>
-        </div>
-    );
-};
-
-// Story Generator Component
-const StoryGenerator = () => {
-    const [prompt, setPrompt] = useState('');
-    const [story, setStory] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
-
-    const handleGenerateStory = async () => {
-        setError(null);
-        setIsLoading(true);
-        setStory('');
-
-        if (!prompt.trim()) {
-            setError('Please enter a prompt to generate a story.');
-            setIsLoading(false);
-            return;
-        }
-
-        try {
-            const chatHistory = [{ role: "user", parts: [{ text: `Write a creative and short story based on this prompt: "${prompt}"` }] }];
-            const payload = { contents: chatHistory };
-            const apiKey = "";
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
             });
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error.message || 'Story generation failed.');
+            stickerDownloadButton.addEventListener('click', () => {
+                const imageUrl = stickerGeneratedImage.src;
+                if (imageUrl && imageUrl.startsWith('data:image')) {
+                    const link = document.createElement('a');
+                    link.href = imageUrl;
+                    link.download = 'ai-sticker.png';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+            });
+
+
+            // --- Meme Generator Logic ---
+            const memeImageUpload = document.getElementById('meme-image-upload');
+            const memeTopText = document.getElementById('meme-top-text');
+            const memeBottomText = document.getElementById('meme-bottom-text');
+            const memeCanvas = document.getElementById('meme-canvas');
+            const memePlaceholder = document.getElementById('meme-placeholder');
+            const memeDownloadButton = document.getElementById('meme-download-button');
+            const ctx = memeCanvas.getContext('2d');
+            let memeImage = null;
+
+            function drawMeme() {
+                if (!memeImage) return;
+
+                memeCanvas.width = memeImage.naturalWidth;
+                memeCanvas.height = memeImage.naturalHeight;
+                ctx.clearRect(0, 0, memeCanvas.width, memeCanvas.height);
+                ctx.drawImage(memeImage, 0, 0);
+
+                ctx.fillStyle = 'white';
+                ctx.strokeStyle = 'black';
+                ctx.lineWidth = 2;
+                ctx.textAlign = 'center';
+                ctx.font = `${memeCanvas.width / 15}px Impact`;
+
+                // Top text
+                ctx.textBaseline = 'top';
+                ctx.fillText(memeTopText.value.toUpperCase(), memeCanvas.width / 2, 10);
+                ctx.strokeText(memeTopText.value.toUpperCase(), memeCanvas.width / 2, 10);
+
+                // Bottom text
+                ctx.textBaseline = 'bottom';
+                ctx.fillText(memeBottomText.value.toUpperCase(), memeCanvas.width / 2, memeCanvas.height - 10);
+                ctx.strokeText(memeBottomText.value.toUpperCase(), memeCanvas.width / 2, memeCanvas.height - 10);
             }
 
-            const result = await response.json();
-            const generatedText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+            memeImageUpload.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        memeImage = new Image();
+                        memeImage.onload = () => {
+                            drawMeme();
+                            memeCanvas.classList.remove('hidden');
+                            memePlaceholder.classList.add('hidden');
+                        };
+                        memeImage.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                    memeDownloadButton.disabled = false;
+                }
+            });
 
-            if (generatedText) {
-                setStory(generatedText);
-            } else {
-                setError('No story could be generated from the prompt.');
-            }
-        } catch (err) {
-            console.error('API Error:', err);
-            setError(`An error occurred: ${err.message}`);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+            memeTopText.addEventListener('input', drawMeme);
+            memeBottomText.addEventListener('input', drawMeme);
 
-    return (
-        <div className="flex flex-col gap-6">
-            <h2 className="text-3xl font-bold text-center text-gray-800">AI Story Generator</h2>
-            <p className="text-center text-gray-600">
-                Provide a prompt and let AI write a short story for you.
-            </p>
+            memeDownloadButton.addEventListener('click', () => {
+                if (memeImage) {
+                    const link = document.createElement('a');
+                    link.href = memeCanvas.toDataURL('image/png');
+                    link.download = 'my-meme.png';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+            });
 
-            <div>
-                <label htmlFor="story-prompt" className="block text-sm font-medium text-gray-700 mb-2">
-                    Story Prompt
-                </label>
-                <textarea
-                    id="story-prompt"
-                    rows="4"
-                    className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full rounded-xl border-gray-300 p-3"
-                    placeholder="e.g., 'A lost astronaut discovers an ancient civilization on a jungle planet.'"
-                    value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
-                ></textarea>
-            </div>
+            // --- Story Generator Logic ---
+            const storyPromptInput = document.getElementById('story-prompt-input');
+            const storyGenerateButton = document.getElementById('story-generate-button');
+            const storyButtonText = document.getElementById('story-button-text');
+            const storyLoadingSpinner = document.getElementById('story-loading-spinner');
+            const storyOutputSection = document.getElementById('story-output-section');
+            const storyText = document.getElementById('story-text');
 
-            <button
-                onClick={handleGenerateStory}
-                disabled={isLoading}
-                className="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent rounded-full shadow-lg text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 disabled:opacity-50"
-            >
-                <span>{isLoading ? 'Generating...' : 'Generate Story'}</span>
-                {isLoading && (
-                    <div className="ml-2 h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                )}
-            </button>
+            storyGenerateButton.addEventListener('click', async () => {
+                hideMessage('story-error-box');
+                storyOutputSection.classList.add('hidden');
+                
+                const prompt = storyPromptInput.value.trim();
+                if (!prompt) {
+                    showMessage('story-error-box', 'Please enter a prompt to generate a story.');
+                    return;
+                }
 
-            {error && (
-                <div className="mt-4 p-4 rounded-xl text-sm text-center text-red-700 bg-red-100 border border-red-400">
-                    {error}
-                </div>
-            )}
+                storyGenerateButton.disabled = true;
+                storyButtonText.textContent = 'Generating...';
+                storyLoadingSpinner.classList.remove('hidden');
+                
+                try {
+                    const chatHistory = [{ role: "user", parts: [{ text: `Write a creative and short story based on this prompt: "${prompt}"` }] }];
+                    const payload = { contents: chatHistory };
+                    const apiKey = "AIzaSyBgc9zR-9Y7wqaBFdpxYw9oY5sTdTjYvFA";
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
 
-            {story && (
-                <div className="mt-4 p-6 bg-gray-100 rounded-2xl shadow-inner whitespace-pre-wrap">
-                    {story}
-                </div>
-            )}
-        </div>
-    );
-};
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
 
-// Picture Effects Component
-const PictureEffects = () => {
-    const [image, setImage] = useState(null);
-    const [filter, setFilter] = useState('none');
-    const imageRef = useRef(null);
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error.message || 'Story generation failed.');
+                    }
+                    const result = await response.json();
+                    const generatedText = result.candidates?.[0]?.content?.parts?.[0]?.text;
 
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setImage(URL.createObjectURL(file));
-        }
-    };
+                    if (generatedText) {
+                        storyText.textContent = generatedText;
+                        storyOutputSection.classList.remove('hidden');
+                    } else {
+                        throw new Error('No story could be generated from the prompt.');
+                    }
+                } catch (error) {
+                    console.error('API Error:', error);
+                    showMessage('story-error-box', `An error occurred: ${error.message}`);
+                } finally {
+                    storyGenerateButton.disabled = false;
+                    storyButtonText.textContent = 'Generate Story';
+                    storyLoadingSpinner.classList.add('hidden');
+                }
+            });
 
-    const handleDownload = () => {
-        if (!image) return;
 
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        const img = imageRef.current;
+            // --- Picture Effects Logic ---
+            const effectsImageUpload = document.getElementById('effects-image-upload');
+            const effectsImagePreview = document.getElementById('effects-image-preview');
+            const effectsPlaceholder = document.getElementById('effects-placeholder');
+            const effectsDownloadButton = document.getElementById('effects-download-button');
+            const filterButtons = document.querySelectorAll('.filter-button');
 
-        canvas.width = img.naturalWidth;
-        canvas.height = img.naturalHeight;
+            effectsImageUpload.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        effectsImagePreview.src = e.target.result;
+                        effectsImagePreview.style.filter = 'none';
+                        effectsImagePreview.classList.remove('hidden');
+                        effectsPlaceholder.classList.add('hidden');
+                        effectsDownloadButton.disabled = false;
+                        filterButtons.forEach(btn => btn.classList.remove('bg-indigo-600', 'text-white', 'bg-gray-200', 'hover:bg-gray-300'));
+                        document.querySelector('[data-filter="none"]').classList.add('bg-indigo-600', 'text-white');
+                        currentFilter = 'none';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
 
-        // Apply the filter to the canvas context
-        ctx.filter = filter === 'none' ? 'none' : `${filter}(1)`;
-        if (filter === 'blur') ctx.filter = 'blur(5px)';
-        if (filter === 'grayscale') ctx.filter = 'grayscale(100%)';
-        if (filter === 'sepia') ctx.filter = 'sepia(100%)';
-        if (filter === 'invert') ctx.filter = 'invert(100%)';
+            filterButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    if (!effectsImagePreview.src) return;
 
-        ctx.drawImage(img, 0, 0);
+                    filterButtons.forEach(btn => btn.classList.remove('bg-indigo-600', 'text-white'));
+                    filterButtons.forEach(btn => btn.classList.add('bg-gray-200', 'hover:bg-gray-300'));
+                    e.target.classList.remove('bg-gray-200', 'hover:bg-gray-300');
+                    e.target.classList.add('bg-indigo-600', 'text-white');
 
-        const link = document.createElement('a');
-        link.href = canvas.toDataURL('image/png');
-        link.download = `image-with-${filter}-effect.png`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    };
+                    const filter = e.target.dataset.filter;
+                    currentFilter = filter;
+                    if (filter === 'blur') {
+                        effectsImagePreview.style.filter = 'blur(5px)';
+                    } else if (filter === 'none') {
+                        effectsImagePreview.style.filter = 'none';
+                    } else {
+                        effectsImagePreview.style.filter = `${filter}(100%)`;
+                    }
+                });
+            });
 
-    return (
-        <div className="flex flex-col gap-6">
-            <h2 className="text-3xl font-bold text-center text-gray-800">Picture Effects</h2>
-            <p className="text-center text-gray-600">
-                Upload a picture and apply various filters and effects.
-            </p>
+            effectsDownloadButton.addEventListener('click', () => {
+                if (!effectsImagePreview.src) return;
 
-            <div className="flex flex-col sm:flex-row gap-4">
-                <div className="flex-1 space-y-4">
-                    <div className="flex flex-col items-start gap-2">
-                        <label htmlFor="effects-image" className="block text-sm font-medium text-gray-700">Upload Image</label>
-                        <input
-                            type="file"
-                            id="effects-image"
-                            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
-                            onChange={handleImageChange}
-                            accept="image/*"
-                        />
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                        <button
-                            onClick={() => setFilter('none')}
-                            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${filter === 'none' ? 'bg-indigo-600 text-white' : 'bg-gray-200 hover:bg-gray-300'}`}
-                        >
-                            None
-                        </button>
-                        <button
-                            onClick={() => setFilter('grayscale')}
-                            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${filter === 'grayscale' ? 'bg-indigo-600 text-white' : 'bg-gray-200 hover:bg-gray-300'}`}
-                        >
-                            Grayscale
-                        </button>
-                        <button
-                            onClick={() => setFilter('sepia')}
-                            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${filter === 'sepia' ? 'bg-indigo-600 text-white' : 'bg-gray-200 hover:bg-gray-300'}`}
-                        >
-                            Sepia
-                        </button>
-                        <button
-                            onClick={() => setFilter('invert')}
-                            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${filter === 'invert' ? 'bg-indigo-600 text-white' : 'bg-gray-200 hover:bg-gray-300'}`}
-                        >
-                            Invert
-                        </button>
-                        <button
-                            onClick={() => setFilter('blur')}
-                            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${filter === 'blur' ? 'bg-indigo-600 text-white' : 'bg-gray-200 hover:bg-gray-300'}`}
-                        >
-                            Blur
-                        </button>
-                    </div>
-                </div>
-                <div className="flex-1 flex flex-col items-center justify-center">
-                    {image ? (
-                        <img
-                            ref={imageRef}
-                            src={image}
-                            alt="Preview"
-                            style={{ filter: filter === 'blur' ? 'blur(5px)' : filter === 'none' ? 'none' : `${filter}(100%)` }}
-                            className="max-w-full h-auto rounded-lg shadow-lg"
-                        />
-                    ) : (
-                        <div className="w-full h-64 flex items-center justify-center text-gray-400 border-2 border-dashed rounded-lg bg-gray-100">
-                            Image Preview
-                        </div>
-                    )}
-                </div>
-            </div>
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = effectsImagePreview;
 
-            <button
-                onClick={handleDownload}
-                disabled={!image}
-                className="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent rounded-full shadow-lg text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 disabled:opacity-50"
-            >
-                Download Image
-            </button>
-        </div>
-    );
-};
+                canvas.width = img.naturalWidth;
+                canvas.height = img.naturalHeight;
 
-export default App;
+                if (currentFilter === 'blur') {
+                    ctx.filter = 'blur(5px)';
+                } else if (currentFilter !== 'none') {
+                    ctx.filter = `${currentFilter}(100%)`;
+                }
+
+                ctx.drawImage(img, 0, 0);
+
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = `image-with-${currentFilter}-effect.png`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+        });
+    </script>
+</body>
+</html>

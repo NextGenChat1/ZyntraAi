@@ -1,417 +1,192 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ur" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zyntra AI</title>
-    <!-- Tailwind CSS CDN for styling -->
+    <title>AI Sticker Maker - Zyntra</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu&display=swap');
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0b1120 0%, #171d34 100%);
-            color: white;
+            font-family: 'Noto Nastaliq Urdu', sans-serif;
+            direction: rtl;
         }
-        .container { max-width: 1000px; }
-        .card {
-            box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.4);
-            background-color: rgba(25, 29, 44, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 1.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .file-upload-area {
-            border: 2px dashed #4a5568;
-            background-color: rgba(255, 255, 255, 0.05);
-            transition: all 0.3s ease;
-        }
-        .file-upload-area:hover {
-            border-color: #6366f1;
-            background-color: rgba(99, 102, 241, 0.1);
-        }
+        /* Custom spinner animation */
         .spinner {
             border: 4px solid rgba(255, 255, 255, 0.3);
-            width: 48px;
-            height: 48px;
+            border-top-color: #ffffff;
             border-radius: 50%;
-            border-left-color: #ffffff;
+            width: 32px;
+            height: 32px;
             animation: spin 1s linear infinite;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        #meme-text-overlay {
-            position: absolute;
-            bottom: 1rem;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
-            font-size: 2.5rem;
-            font-weight: 800;
-            text-align: center;
-            text-shadow: 2px 2px 4px #000000;
-            width: 90%;
-            line-height: 1.2;
-            padding: 0 1rem;
-            font-style: italic;
-        }
-        .tab-button.active {
-            background-color: #6366f1;
-            color: white;
-            box-shadow: 0 4px 10px rgba(99, 102, 241, 0.4);
-        }
-        .tab-content { transition: opacity 0.5s ease-in-out; }
-        .story-output {
-            background-color: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .image-output { position: relative; }
-        #image-effect-canvas { filter: brightness(1); transition: filter 1s ease; }
     </style>
 </head>
-<body class="flex flex-col items-center justify-center min-h-screen p-4">
-    <div class="container mx-auto p-8 lg:p-12">
-        <header class="text-center mb-12">
-            <h1 class="text-6xl font-extrabold leading-tight drop-shadow-lg">Zyntra AI</h1>
-            <p class="text-xl mt-4 text-gray-300 font-medium drop-shadow-md">Create, Animate, and Story-tell with the power of AI</p>
-        </header>
+<body class="bg-gradient-to-br from-indigo-500 to-purple-600 min-h-screen flex items-center justify-center p-4">
 
-        <div class="card p-8 transition-all duration-500">
-            <!-- Tab Navigation -->
-            <div class="flex flex-wrap justify-center mb-6 space-x-2 sm:space-x-4">
-                <button class="tab-button active flex-1 py-3 px-6 rounded-full text-lg font-bold transition-all duration-300" onclick="showTab('meme')">Meme Crafter</button>
-                <button class="tab-button flex-1 py-3 px-6 rounded-full text-lg font-bold transition-all duration-300" onclick="showTab('story')">Story Weaver</button>
-                <button class="tab-button flex-1 py-3 px-6 rounded-full text-lg font-bold transition-all duration-300" onclick="showTab('effects')">Photo Effects</button>
-            </div>
-            
-            <form id="ai-form">
-                <!-- Image Upload Area -->
-                <div id="drop-area" class="file-upload-area p-8 rounded-lg cursor-pointer text-center mb-6">
-                    <input type="file" id="image-upload" accept="image/*" class="hidden">
-                    <p class="text-gray-400 font-bold">Drag and drop your image here<br>or</p>
-                    <button type="button" class="mt-4 bg-indigo-500 text-white py-2 px-6 rounded-full hover:bg-indigo-600 transition-colors">Browse Files</button>
-                </div>
-                
-                <!-- Image Preview -->
-                <div id="image-preview-container" class="relative hidden mb-6 rounded-lg overflow-hidden border-4 border-indigo-500">
-                    <img id="image-preview" class="w-full h-auto">
-                    <span id="remove-image" class="absolute top-2 right-2 cursor-pointer text-white bg-red-500 rounded-full w-8 h-8 flex items-center justify-center font-bold text-xl">&times;</span>
-                </div>
+    <!-- Main Container -->
+    <div class="bg-white bg-opacity-90 backdrop-blur-md rounded-3xl shadow-2xl p-8 max-w-2xl w-full flex flex-col gap-6 transform transition-all duration-300">
+        <h1 class="text-3xl font-bold text-center text-gray-800">
+            اے آئی اسٹیکر میکر
+        </h1>
+        <p class="text-center text-gray-600">
+            اپنی تصویر اپ لوڈ کریں اور ایک پرامپٹ لکھ کر منفرد اسٹیکرز بنائیں۔
+        </p>
 
-                <!-- Tab-specific Content -->
-                <!-- Meme Tab -->
-                <div id="meme-tab" class="tab-content">
-                    <div id="meme-output" class="image-output mt-6 hidden rounded-lg overflow-hidden border-4 border-indigo-500">
-                        <canvas id="meme-canvas" class="w-full h-auto"></canvas>
-                        <div id="meme-text-overlay"></div>
-                    </div>
-                    <div id="meme-refinement" class="mt-6 hidden">
-                        <label for="refine-prompt" class="block text-gray-300 font-bold mb-2">Refine the Caption:</label>
-                        <div class="flex space-x-2">
-                            <input type="text" id="refine-prompt" placeholder="e.g., 'Make it funnier' or 'Add more sarcasm'" class="flex-1 p-3 rounded-lg bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white">
-                            <button type="button" id="refine-button" class="bg-indigo-600 text-white px-6 rounded-lg font-bold hover:bg-indigo-700 transition-colors">Refine</button>
+        <!-- Input Section -->
+        <div class="space-y-4">
+            <!-- Image Upload -->
+            <div>
+                <label for="image-upload" class="block text-sm font-medium text-gray-700 mb-2">تصویر اپ لوڈ کریں</label>
+                <div class="mt-1 flex justify-center rounded-xl border-2 border-dashed border-gray-300 px-6 pt-5 pb-6 hover:border-indigo-400 transition-colors duration-200">
+                    <div class="space-y-1 text-center">
+                        <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m-4-4l-1.172 1.172a4 4 0 01-5.656 0L28 28m0 0L42 12m-8 8l4-4m-4-4l-4 4m-4-4l4 4M8 12h16m-4-4h4a4 4 0 014 4v4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <div class="flex text-sm text-gray-600">
+                            <label for="image-upload" class="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2">
+                                <span>ایک فائل اپ لوڈ کریں</span>
+                                <input id="image-upload" name="image-upload" type="file" class="sr-only" accept="image/*">
+                            </label>
+                            <p class="pr-1">یا ڈریگ اور ڈراپ کریں</p>
                         </div>
+                        <p class="text-xs text-gray-500">PNG, JPG, GIF زیادہ سے زیادہ 10MB</p>
                     </div>
                 </div>
+            </div>
 
-                <!-- Story Tab -->
-                <div id="story-tab" class="tab-content hidden">
-                    <label for="story-prompt" class="block text-gray-300 font-bold mb-2">Give a story idea:</label>
-                    <input type="text" id="story-prompt" placeholder="e.g., 'A journey to the moon'" class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white mb-4">
-                    <div id="story-output" class="story-output p-4 rounded-lg mt-6 hidden">
-                        <h3 class="text-xl font-bold mb-2 text-indigo-400">AI Story:</h3>
-                        <p id="story-text" class="text-gray-200 leading-relaxed"></p>
-                    </div>
-                </div>
+            <!-- Prompt Input -->
+            <div>
+                <label for="prompt-input" class="block text-sm font-medium text-gray-700 mb-2">
+                    پرامپٹ لکھیں (مثال: "a cute cat wearing a hat")
+                </label>
+                <textarea id="prompt-input" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full rounded-xl border-gray-300 p-3" placeholder="مطلوبہ اسٹیکر کی تفصیل یہاں لکھیں..."></textarea>
+            </div>
+        </div>
 
-                <!-- Photo Effects Tab -->
-                <div id="effects-tab" class="tab-content hidden">
-                    <label for="effect-prompt" class="block text-gray-300 font-bold mb-2">Describe the mood:</label>
-                    <input type="text" id="effect-prompt" placeholder="e.g., 'Make it a futuristic cyberpunk scene'" class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white mb-4">
-                    <div id="effects-output" class="image-output mt-6 hidden rounded-lg overflow-hidden border-4 border-indigo-500">
-                        <canvas id="image-effect-canvas" class="w-full h-auto"></canvas>
-                    </div>
-                </div>
-                
-                <!-- Action Buttons for Download and Share -->
-                <div id="action-buttons" class="mt-6 flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 hidden">
-                    <button type="button" id="download-output" class="bg-green-500 text-white font-bold py-3 px-6 rounded-full shadow-lg hover:bg-green-600 transition-all duration-300 transform hover:scale-105">
-                        <i class="fas fa-download mr-2"></i> Download
-                    </button>
-                    <div class="flex space-x-2">
-                        <a id="share-twitter" href="#" target="_blank" class="bg-blue-400 text-white p-3 rounded-full shadow-lg hover:bg-blue-500 transition-colors">
-                            <i class="fab fa-twitter text-xl"></i>
-                        </a>
-                        <a id="share-facebook" href="#" target="_blank" class="bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-colors">
-                            <i class="fab fa-facebook-f text-xl"></i>
-                        </a>
-                        <a id="share-whatsapp" href="#" target="_blank" class="bg-green-500 text-white p-3 rounded-full shadow-lg hover:bg-green-600 transition-colors">
-                            <i class="fab fa-whatsapp text-xl"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- Main Generate Button -->
-                <button type="submit" id="generate-button" class="w-full bg-indigo-600 text-white font-extrabold text-lg py-4 px-4 rounded-full shadow-lg hover:bg-indigo-700 transition-all duration-300 transform hover:scale-105 mt-6 hidden" disabled>
-                    Generate with AI
+        <!-- Generate Button -->
+        <button id="generate-button" class="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent rounded-full shadow-lg text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 disabled:opacity-50">
+            <span id="button-text">اسٹیکر بنائیں</span>
+            <div id="loading-spinner" class="hidden spinner"></div>
+        </button>
+
+        <!-- Output Section -->
+        <div id="result-section" class="hidden mt-4">
+            <h2 class="text-2xl font-bold text-center text-gray-800 mb-4">آپ کا اسٹیکر</h2>
+            <div class="bg-gray-100 rounded-2xl p-4 shadow-inner flex items-center justify-center">
+                <img id="generated-image" class="max-w-full h-auto rounded-xl shadow-lg" alt="Generated Sticker">
+            </div>
+            <div class="flex justify-center mt-4">
+                <button id="download-button" class="inline-flex items-center px-4 py-2 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
+                    اسٹیکر ڈاؤن لوڈ کریں
                 </button>
-
-                <!-- Loading Spinner -->
-                <div id="loading-spinner" class="flex justify-center items-center h-24 hidden mt-6">
-                    <div class="spinner"></div>
-                </div>
-            </form>
+            </div>
+        </div>
+        
+        <!-- Error/Message Box -->
+        <div id="message-box" class="hidden mt-4 p-4 rounded-xl text-sm text-center text-red-700 bg-red-100 border border-red-400">
+            <span id="message-text"></span>
         </div>
     </div>
 
     <script>
-        // UI elements
-        const dropArea = document.getElementById('drop-area');
+        // DOM element references
         const imageUpload = document.getElementById('image-upload');
-        const imagePreviewContainer = document.getElementById('image-preview-container');
-        const imagePreview = document.getElementById('image-preview');
-        const removeImageBtn = document.getElementById('remove-image');
+        const promptInput = document.getElementById('prompt-input');
         const generateButton = document.getElementById('generate-button');
-        const memeOutput = document.getElementById('meme-output');
-        const memeCanvas = document.getElementById('meme-canvas');
-        const memeTextOverlay = document.getElementById('meme-text-overlay');
-        const storyOutput = document.getElementById('story-output');
-        const storyText = document.getElementById('story-text');
-        const effectsOutput = document.getElementById('effects-output');
-        const effectsCanvas = document.getElementById('image-effect-canvas');
+        const buttonText = document.getElementById('button-text');
         const loadingSpinner = document.getElementById('loading-spinner');
-        const downloadOutputBtn = document.getElementById('download-output');
-        const actionButtons = document.getElementById('action-buttons');
-        const shareTwitter = document.getElementById('share-twitter');
-        const shareFacebook = document.getElementById('share-facebook');
-        const shareWhatsapp = document.getElementById('share-whatsapp');
-        const refinePromptInput = document.getElementById('refine-prompt');
-        const refineButton = document.getElementById('refine-button');
-        const storyPromptInput = document.getElementById('story-prompt');
-        const effectPromptInput = document.getElementById('effect-prompt');
-        
-        // Tab system
-        const memeTab = document.getElementById('meme-tab');
-        const storyTab = document.getElementById('story-tab');
-        const effectsTab = document.getElementById('effects-tab');
-        let activeTab = 'meme';
+        const resultSection = document.getElementById('result-section');
+        const generatedImage = document.getElementById('generated-image');
+        const downloadButton = document.getElementById('download-button');
+        const messageBox = document.getElementById('message-box');
+        const messageText = document.getElementById('message-text');
 
-        function showTab(tabName) {
-            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-            document.querySelector(`.tab-button[onclick="showTab('${tabName}')"]`).classList.add('active');
-            
-            memeTab.classList.add('hidden');
-            storyTab.classList.add('hidden');
-            effectsTab.classList.add('hidden');
-            
-            actionButtons.classList.add('hidden');
-            memeOutput.classList.add('hidden');
-            storyOutput.classList.add('hidden');
-            effectsOutput.classList.add('hidden');
+        // Function to display messages
+        function showMessage(message, type = 'error') {
+            messageBox.classList.remove('hidden', 'bg-red-100', 'text-red-700', 'border-red-400', 'bg-green-100', 'text-green-700', 'border-green-400');
+            messageBox.classList.add(
+                type === 'error' ? 'bg-red-100' : 'bg-green-100',
+                type === 'error' ? 'text-red-700' : 'text-green-700',
+                type === 'error' ? 'border-red-400' : 'border-green-400'
+            );
+            messageText.textContent = message;
+        }
 
-            activeTab = tabName;
-            if (tabName === 'meme') {
-                memeTab.classList.remove('hidden');
-                generateButton.textContent = 'Generate Meme';
-            } else if (tabName === 'story') {
-                storyTab.classList.remove('hidden');
-                generateButton.textContent = 'Generate Story';
-            } else if (tabName === 'effects') {
-                effectsTab.classList.remove('hidden');
-                generateButton.textContent = 'Apply Effect';
-            }
+        // Function to hide messages
+        function hideMessage() {
+            messageBox.classList.add('hidden');
+        }
 
-            if (uploadedImageFile) {
-                generateButton.classList.remove('hidden');
-            }
+        // Function to show loading state
+        function showLoading() {
+            generateButton.disabled = true;
+            buttonText.textContent = 'بنایا جا رہا ہے...';
+            loadingSpinner.classList.remove('hidden');
+            hideMessage();
+            resultSection.classList.add('hidden');
+        }
+
+        // Function to hide loading state
+        function hideLoading() {
+            generateButton.disabled = false;
+            buttonText.textContent = 'اسٹیکر بنائیں';
+            loadingSpinner.classList.add('hidden');
         }
         
-        // Global variables
-        let uploadedImageFile = null;
-        let lastGeneratedText = "";
-        
-        // IMPORTANT: Replace with your actual Gemini API key from https://aistudio.google.com/app/apikey
-        // Make sure to enclose the key in quotes, like: const apiKey = "YOUR_API_KEY_HERE";
-        const apiKey = "AIzaSyBgc9zR-9Y7wqaBFdpxYw9oY5sTdTjYvFA"; 
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-
-        // Utility function to convert file to base64
-        function fileToBase64(file) {
+        // Function to convert a file to a base64 string
+        function toBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
+                reader.readAsDataURL(file);
                 reader.onload = () => resolve(reader.result.split(',')[1]);
                 reader.onerror = error => reject(error);
-                reader.readAsDataURL(file);
             });
         }
 
-        // Handle image drop and selection
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropArea.addEventListener(eventName, preventDefaults, false);
-        });
-        function preventDefaults(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-        ['dragenter', 'dragover'].forEach(eventName => {
-            dropArea.addEventListener(eventName, () => dropArea.classList.add('border-indigo-500'), false);
-        });
-        ['dragleave', 'drop'].forEach(eventName => {
-            dropArea.addEventListener(eventName, () => dropArea.classList.remove('border-indigo-500'), false);
-        });
-        dropArea.addEventListener('drop', handleDrop, false);
-        dropArea.addEventListener('click', () => imageUpload.click());
+        // Event listener for the generate button
+        generateButton.addEventListener('click', async () => {
+            hideMessage();
+            const file = imageUpload.files[0];
+            const prompt = promptInput.value.trim();
 
-        imageUpload.addEventListener('change', (e) => handleFiles(e.target.files));
-
-        function handleFiles(files) {
-            const file = files[0];
-            if (file && file.type.startsWith('image/')) {
-                uploadedImageFile = file;
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    imagePreview.src = e.target.result;
-                    showPreview();
-                };
-                reader.readAsDataURL(file);
+            if (!file || !prompt) {
+                showMessage('براہ کرم ایک تصویر اپ لوڈ کریں اور ایک پرامپٹ لکھیں۔');
+                return;
             }
-        }
 
-        function showPreview() {
-            dropArea.classList.add('hidden');
-            imagePreviewContainer.classList.remove('hidden');
-            generateButton.classList.remove('hidden');
-            generateButton.disabled = false;
-        }
-
-        removeImageBtn.addEventListener('click', () => {
-            uploadedImageFile = null;
-            imagePreview.src = '';
-            dropArea.classList.remove('hidden');
-            imagePreviewContainer.classList.add('hidden');
-            generateButton.classList.add('hidden');
-            memeOutput.classList.add('hidden');
-            storyOutput.classList.add('hidden');
-            effectsOutput.classList.add('hidden');
-            actionButtons.classList.add('hidden');
-            refinePromptInput.value = '';
-            memeRefinement.classList.add('hidden');
-        });
-
-        // Function to create and render meme
-        function renderMeme(imageUrl, memeText) {
-            const img = new Image();
-            img.onload = () => {
-                const ctx = memeCanvas.getContext('2d');
-                memeCanvas.width = img.width;
-                memeCanvas.height = img.height;
-                ctx.drawImage(img, 0, 0, img.width, img.height);
-                memeOutput.classList.remove('hidden');
-                memeTextOverlay.textContent = memeText;
-                actionButtons.classList.remove('hidden');
-                memeRefinement.classList.remove('hidden');
-                updateShareButtons(memeText, imageUrl);
-            };
-            img.src = imageUrl;
-        }
-
-        // Function to render story
-        function renderStory(story) {
-            storyText.textContent = story;
-            storyOutput.classList.remove('hidden');
-            actionButtons.classList.remove('hidden');
-            updateShareButtons(story, imagePreview.src);
-        }
-        
-        // Function to apply photo effects
-        function applyPhotoEffect(imageUrl, effectPrompt) {
-            const img = new Image();
-            img.onload = () => {
-                const ctx = effectsCanvas.getContext('2d');
-                effectsCanvas.width = img.width;
-                effectsCanvas.height = img.height;
-                ctx.drawImage(img, 0, 0, img.width, img.height);
-                effectsOutput.classList.remove('hidden');
-                
-                // Simple hardcoded effects based on keywords. The AI just provides the description.
-                let filter = 'none';
-                if (effectPrompt.toLowerCase().includes('futuristic')) {
-                    filter = 'saturate(200%) hue-rotate(200deg) brightness(1.2)';
-                } else if (effectPrompt.toLowerCase().includes('vintage')) {
-                    filter = 'sepia(80%) saturate(150%) brightness(0.8)';
-                } else if (effectPrompt.toLowerCase().includes('dreamy')) {
-                    filter = 'blur(2px) brightness(1.1) saturate(120%)';
-                } else {
-                    filter = 'contrast(1.2) brightness(1.1)';
-                }
-                effectsCanvas.style.filter = filter;
-                
-                actionButtons.classList.remove('hidden');
-                updateShareButtons(`Zyntra AI applied a '${effectPrompt}' effect!`, imageUrl);
-            };
-            img.src = imageUrl;
-        }
-
-        // Update share buttons with output data
-        function updateShareButtons(text, imageUrl) {
-            const shareText = `Check out what Zyntra AI made: "${text}"`;
-            const encodedText = encodeURIComponent(shareText);
-
-            shareTwitter.href = `https://twitter.com/intent/tweet?text=${encodedText}`;
-            shareFacebook.href = `https://www.facebook.com/sharer/sharer.php?quote=${encodedText}&u=${window.location.href}`;
-            shareWhatsapp.href = `https://wa.me/?text=${encodedText}`;
-        }
-        
-        // Download output functionality
-        downloadOutputBtn.addEventListener('click', () => {
-            let link = document.createElement('a');
-            link.download = `zyntra_ai_output.png`;
-
-            if (activeTab === 'meme' && !memeOutput.classList.contains('hidden')) {
-                link.href = memeCanvas.toDataURL("image/png");
-            } else if (activeTab === 'effects' && !effectsOutput.classList.contains('hidden')) {
-                link.href = effectsCanvas.toDataURL("image/png");
-            } else if (activeTab === 'story' && !storyOutput.classList.contains('hidden')) {
-                // For story, we'll download a simple text file
-                const storyContent = storyText.textContent;
-                const blob = new Blob([storyContent], { type: 'text/plain' });
-                link.href = URL.createObjectURL(blob);
-                link.download = 'zyntra_ai_story.txt';
-            } else {
-                return; // Do nothing if no output is ready
+            if (file.size > 10 * 1024 * 1024) {
+                showMessage('تصویر بہت بڑی ہے۔ براہ کرم 10MB سے کم فائل اپ لوڈ کریں۔');
+                return;
             }
-            
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        });
 
-        // Call Gemini API to generate content
-        async function callGeminiAPI(prompt, imageAsBase64, retryCount = 0) {
-            loadingSpinner.classList.remove('hidden');
-            generateButton.disabled = true;
-            refineButton.disabled = true;
-
-            const payload = {
-                contents: [{
-                    role: "user",
-                    parts: [
-                        { text: prompt },
-                        {
-                            inlineData: {
-                                mimeType: uploadedImageFile.type,
-                                data: imageAsBase64
-                            }
-                        }
-                    ]
-                }],
-            };
+            showLoading();
 
             try {
+                // Read the image file and convert it to base64
+                const base64ImageData = await toBase64(file);
+
+                // API call to the image generation model
+                const payload = {
+                    instances: {
+                        prompt: prompt,
+                        image: {
+                            bytesBase64Encoded: base64ImageData
+                        }
+                    },
+                    parameters: {
+                        sampleCount: 1,
+                        negativePrompt: "low quality, bad hands, blurry, distorted, text, watermark"
+                    }
+                };
+                const apiKey = "AIzaSyCIgM8f1InENfRUnVMNiEGqjBm87mhcS7U";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
+
                 const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -419,83 +194,42 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error(`API error: ${response.statusText}`);
+                    const errorData = await response.json();
+                    throw new Error(errorData.error.message || 'Image generation failed');
                 }
 
                 const result = await response.json();
                 
-                if (result.candidates && result.candidates.length > 0 &&
-                    result.candidates[0].content && result.candidates[0].content.parts &&
-                    result.candidates[0].content.parts.length > 0) {
-                    const text = result.candidates[0].content.parts[0].text;
-                    return text.trim();
-                } else {
-                    throw new Error('No content received from API.');
+                // Extract the generated image data
+                const base64Data = result?.predictions?.[0]?.bytesBase64Encoded;
+                if (!base64Data) {
+                    throw new Error('No image data received from the API.');
                 }
+                
+                const imageUrl = `data:image/png;base64,${base64Data}`;
+                generatedImage.src = imageUrl;
+                resultSection.classList.remove('hidden');
 
             } catch (error) {
-                if (retryCount < 3) {
-                    console.error(`Attempt ${retryCount + 1} failed. Retrying...`, error);
-                    await new Promise(resolve => setTimeout(resolve, Math.pow(2, retryCount) * 1000));
-                    return callGeminiAPI(prompt, imageAsBase64, retryCount + 1);
-                } else {
-                    console.error("Failed to generate content after multiple retries:", error);
-                    alert("An error occurred. Please try again.");
-                    return null;
-                }
+                console.error('API Error:', error);
+                showMessage(`ایک خرابی پیش آگئی: ${error.message}`);
             } finally {
-                loadingSpinner.classList.add('hidden');
-                generateButton.disabled = false;
-                refineButton.disabled = false;
-            }
-        }
-        
-        // Handle form submission
-        document.getElementById('ai-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            if (!uploadedImageFile) return;
-
-            const base64Image = await fileToBase64(uploadedImageFile);
-            let prompt = "";
-
-            if (activeTab === 'meme') {
-                prompt = "Look at this image and write a very short, funny, and viral-ready meme caption in English. Provide only the caption, without any extra information.";
-                const memeText = await callGeminiAPI(prompt, base64Image);
-                if (memeText) {
-                    lastGeneratedText = memeText;
-                    renderMeme(imagePreview.src, memeText);
-                }
-            } else if (activeTab === 'story') {
-                const storyIdea = storyPromptInput.value || "A short story";
-                prompt = `Based on this image and the idea "${storyIdea}", write a creative and engaging three-part story. Title each part.`;
-                const story = await callGeminiAPI(prompt, base64Image);
-                if (story) {
-                    lastGeneratedText = story;
-                    renderStory(story);
-                }
-            } else if (activeTab === 'effects') {
-                 const effectPrompt = effectPromptInput.value || "normal";
-                 applyPhotoEffect(imagePreview.src, effectPrompt);
+                hideLoading();
             }
         });
 
-        // Handle interactive caption refinement
-        refineButton.addEventListener('click', async () => {
-            const refinementPrompt = refinePromptInput.value;
-            if (refinementPrompt && uploadedImageFile) {
-                const base64Image = await fileToBase64(uploadedImageFile);
-                const combinedPrompt = `The previous caption was "${lastGeneratedText}". Look at the image again and, based on my request "${refinementPrompt}", generate a new, improved caption.`;
-                const newMemeText = await callGeminiAPI(combinedPrompt, base64Image);
-                if (newMemeText) {
-                    lastGeneratedText = newMemeText;
-                    renderMeme(imagePreview.src, newMemeText);
-                    refinePromptInput.value = '';
-                }
+        // Event listener for the download button
+        downloadButton.addEventListener('click', () => {
+            const imageUrl = generatedImage.src;
+            if (imageUrl && imageUrl.startsWith('data:image')) {
+                const link = document.createElement('a');
+                link.href = imageUrl;
+                link.download = 'ai-sticker.png';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
             }
         });
-
-        // Initialize with meme tab
-        showTab('meme');
     </script>
 </body>
 </html>
